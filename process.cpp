@@ -1,11 +1,11 @@
 #include "process.h"
 
-process::process(float aT, float tR, int idNum) {
+process::process(int aT, int tR, int idNum) {
   arrivalTime = aT;
   burstTime = tR;
   id = idNum;
 }
-void process::load(float workTime) {
+void process::load(int workTime) {
   try {
     if (workTime <= 0)
       throw "Work Time must be greater than 0!";
@@ -18,7 +18,7 @@ void process::load(float workTime) {
   }
 }
 std::ostream &operator<<(std::ostream &out, const process &p) {
-  out << "Process\n"
+  out << "Process "
       << "ID: " << p.id << "\nArrival Time: " << p.arrivalTime
       << "\tTime Remaining: " << p.burstTime;
   return out;

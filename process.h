@@ -9,12 +9,12 @@
 
 #include <iostream>
 struct process {
-  float arrivalTime;
-  float burstTime;
+  int arrivalTime;
+  int burstTime;
   int id;
 
-  process(float aT, float tR, int idNum);
-  void load(float workTime);
+  process(int aT, int tR, int idNum);
+  void load(int workTime);
   friend std::ostream &operator<<(std::ostream &out, const process &p);
 };
 
