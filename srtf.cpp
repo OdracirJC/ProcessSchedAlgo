@@ -36,9 +36,3 @@ void shortestRemainingTimeFirst(std::vector<process> &processVector) {
 }
 
 /* Load Shortest Process Subroutine */
-process *loadShortestProcess(std::vector<process> &taskQueueRef) {
-  std::sort(taskQueueRef.begin(), taskQueueRef.end(), &process_comp);
-  process *shortest = &(taskQueueRef.front());
-  std::cout << "Shortest Process is process " << shortest->id << ".\n";
-  return shortest;
-}

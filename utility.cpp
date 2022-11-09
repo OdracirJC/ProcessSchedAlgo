@@ -1,7 +1,10 @@
 #include "utility.h"
 /*Comparator*/
-bool process_comp(process const &lhs, process const &rhs) {
+bool process_bt_comp(process const &lhs, process const &rhs) {
   return lhs.burstTime < rhs.burstTime;
+}
+bool process_at_comp(process const &lhs, process const &rhs) {
+  return lhs.arrivalTime < rhs.arrivalTime;
 }
 /*Check if Queue is Done*/
 bool queueDone(std::vector<process> &taskQueueRef) {
@@ -24,4 +27,18 @@ void addToTaskQueue(std::vector<process> &taskQueueRef,
       processVectorRef.erase(processVectorRef.begin() + i);
     }
   }
+}
+
+process *loadFirstProcess(std::vector<process> &taskQueueRef) {
+  std::sort(taskQueueRef.begin(), taskQueueRef.end(), &process_at_comp);
+  process *first = &(taskQueueRef.front());
+  std::cout << "Shortest Process is process " << first->id << ".\n";
+  return first;
+}
+
+process *loadShortestProcess(std::vector<process> &taskQueueRef) {
+  std::sort(taskQueueRef.begin(), taskQueueRef.end(), &process_bt_comp);
+  process *shortest = &(taskQueueRef.front());
+  std::cout << "Shortest Process is process " << shortest->id << ".\n";
+  return shortest;
 }

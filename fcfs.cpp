@@ -1,22 +1,19 @@
-#include "process.h"
 #include "utility.h"
 
-void shortestJobFirst(std::vector<process> &processVector) {
+void firstComeFirstServe(std::vector<process> &processVector) {
   std::vector<process> taskQueue;
   int clock{0};
-
   while (!processVector.empty() || !queueDone(taskQueue)) {
-    std::cout << "Clock Value is at: " << clock << std::endl << std::endl;
+    std::cout << "Clock Value is " << clock << std::endl << std::endl;
     addToTaskQueue(taskQueue, processVector, clock);
     if (taskQueue.size() != 0) {
-
-      process *currentProcess = loadShortestProcess(taskQueue);
+      process *currentProcess = loadFirstProcess(taskQueue);
       clock += currentProcess->burstTime;
 
       std::cout << "Worked on Process " << currentProcess->id << " for "
                 << currentProcess->burstTime << " millisecond(s)" << std::endl
                 << std::endl;
-      std::cout << "Process will now be dumped... " << std::endl << std::endl;
+      std::cout << "Process will now be dumped..." << std::endl << std::endl;
       currentProcess->load(currentProcess->burstTime);
       taskQueue.erase(taskQueue.begin());
     } else
