@@ -13,11 +13,6 @@ int main() {
   process p4(6, 10, 4);
   std::vector<process> processes{p1, p2, p3, p4};
 
-  for (int i = 0; i < processes.size(); i++) {
-    log(processes[i]);
-    log("-------------");
-  }
   shortestRemainingTimeFirst(processes);
-
   return 0;
 }
