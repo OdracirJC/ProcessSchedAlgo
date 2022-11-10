@@ -1,13 +1,10 @@
 #include "process.h"
 
-process::process(int aT, int tR, int idNum) {
-  arrivalTime = aT;
-  burstTime = tR;
-  id = idNum;
-}
-
+process::process(int aT, int tR, int idNum)
+    : arrivalTime{aT}, burstTime{tR}, id{idNum} {}
+process::process(const process &p0)
+    : arrivalTime{p0.arrivalTime}, burstTime{p0.burstTime}, id{p0.id} {}
 void process::load(int workTime) {
-
   if (workTime >= burstTime)
     burstTime = 0;
   else
