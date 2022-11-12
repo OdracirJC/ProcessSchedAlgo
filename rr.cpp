@@ -1,9 +1,11 @@
+#include "analysis.h"
 #include "process.h"
 #include "utility.h"
 #define log(x) std::cout << x << std::endl
 #define line "--------------------"
-void roundRobin(std::vector<process> &processVector, const int quantum) {
 
+void roundRobin(std::vector<process> &processVector, const int quantum) {
+  std::vector<float> rrlist;
   std::vector<process> taskQueue;
   process terminatorBlock(-2, -2, -2);
   process workBlock;
@@ -39,12 +41,15 @@ void roundRobin(std::vector<process> &processVector, const int quantum) {
 
     if (workBlock.burstTime == 0) {
       log("Finished Process " << workBlock.id);
+      log("Turn around Time: " << clock - workBlock.arrivalTime);
+      logTT(rrlist, workBlock, clock);
       qClock = 0;
       workBlock = {-2, -2, -2};
     } else {
       if (qClock == quantum) {
         log("Quantum time has been reached... Will now load workBlock "
             "Processes into back of queue...");
+        addToTaskQueue(taskQueue, processVector, clock);
         taskQueue.push_back(workBlock);
         workBlock = {-1, -1, -1};
         qClock = 0;
@@ -52,4 +57,5 @@ void roundRobin(std::vector<process> &processVector, const int quantum) {
     }
   }
   log("Finished Round Robin in " << clock << " milliseconds.");
+  log("Average Turn Around Time: " << averageTT(rrlist));
 }

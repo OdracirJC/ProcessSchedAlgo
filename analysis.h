@@ -11,7 +11,6 @@ struct turnaround_waiting {
   turnaround_waiting() {}
 };
 
-void logTT(std::vector<float> &processList, process p);
-void logWT(std::vector<float> &processList, process p);
-
+void logTT(std::vector<float> &processList, process &p, int clock);
+float averageTT(std::vector<float> &processList);
 #endif

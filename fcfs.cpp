@@ -1,7 +1,9 @@
+#include "analysis.h"
 #include "utility.h"
 
 void firstComeFirstServe(std::vector<process> &processVector) {
   std::vector<process> taskQueue;
+  std::vector<float> ttPList;
   int clock{0};
   while (!processVector.empty() || !queueDone(taskQueue)) {
     std::cout << "Clock Value is " << clock << std::endl << std::endl;
@@ -14,6 +16,7 @@ void firstComeFirstServe(std::vector<process> &processVector) {
                 << currentProcess->burstTime << " millisecond(s)" << std::endl
                 << std::endl;
       std::cout << "Process will now be dumped..." << std::endl << std::endl;
+      logTT(ttPList, *currentProcess, clock);
       currentProcess->load(currentProcess->burstTime);
       taskQueue.erase(taskQueue.begin());
     } else
@@ -21,5 +24,7 @@ void firstComeFirstServe(std::vector<process> &processVector) {
   }
   std::cout << "Finished all processes using First Come First Serve in "
             << clock << " millisecond(s)." << std::endl
+            << std::endl;
+  std::cout << "Average Turn Around Time: " << averageTT(ttPList) << std::endl
             << std::endl;
 }

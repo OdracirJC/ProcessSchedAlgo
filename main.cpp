@@ -2,13 +2,13 @@
 
 #include <iostream>
 #include <vector>
-
+extern void start();
 extern void shortestRemainingTimeFirst(std::vector<process> &processVector);
 extern void firstComeFirstServe(std::vector<process> &processVector);
 extern void shortestJobFirst(std::vector<process> &processVector);
 extern void roundRobin(std::vector<process> &processVector, int quantum);
-int main() {
 
+int main() {
   process p1(0, 4, 1);
   process p2(2, 8, 2);
   process p3(4, 3, 3);
@@ -34,6 +34,6 @@ int main() {
   std::vector<process> processes_3{p9, p10, p11, p12};
   std::vector<process> processes_4{p13, p14, p15, p16};
 
-  roundRobin(processes_4, 2);
+  shortestJobFirst(processes);
   return 0;
 }
