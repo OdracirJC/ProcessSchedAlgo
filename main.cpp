@@ -1,13 +1,12 @@
 #include "process.h"
+
 #include <iostream>
 #include <vector>
 
-#define log(x) std::cout << x << std::endl
-
-void shortestRemainingTimeFirst(std::vector<process> &processVector);
-void firstComeFirstServe(std::vector<process> &processVector);
-void shortestJobFirst(std::vector<process> &processVector);
-void roundRobin(std::vector<process> &processVector, int quantum);
+extern void shortestRemainingTimeFirst(std::vector<process> &processVector);
+extern void firstComeFirstServe(std::vector<process> &processVector);
+extern void shortestJobFirst(std::vector<process> &processVector);
+extern void roundRobin(std::vector<process> &processVector, int quantum);
 int main() {
 
   process p1(0, 4, 1);
@@ -35,18 +34,6 @@ int main() {
   std::vector<process> processes_3{p9, p10, p11, p12};
   std::vector<process> processes_4{p13, p14, p15, p16};
 
-  shortestRemainingTimeFirst(processes);
-  log("");
-  log("");
-  log("");
-  firstComeFirstServe(processes_2);
-  log("");
-  log("");
-  log("");
-  shortestJobFirst(processes_3);
-  log("");
-  log("");
-  log("");
   roundRobin(processes_4, 2);
   return 0;
 }

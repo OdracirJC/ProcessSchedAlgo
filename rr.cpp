@@ -1,40 +1,55 @@
 #include "process.h"
 #include "utility.h"
-
-void roundRobin(std::vector<process> &processVector, int quantum) {
+#define log(x) std::cout << x << std::endl
+#define line "--------------------"
+void roundRobin(std::vector<process> &processVector, const int quantum) {
 
   std::vector<process> taskQueue;
-  int clock{0};
+  process terminatorBlock(-2, -2, -2);
+  process workBlock;
+  int clock{0}; // Clock begins at 0
+  int qClock{0};
 
-  while (processVector.empty() || !queueDone(taskQueue)) {
-
-    std::cout << "Clock Value is at: " << clock << std::endl << std::endl;
+  while (!processVector.empty() || !queueDone(taskQueue) ||
+         workBlock.id != terminatorBlock.id) {
+    log(line);
+    log("TIME: " << clock);
+    log(line);
+    log("LOG:\n");
     addToTaskQueue(taskQueue, processVector, clock);
 
-    process *currentProcess = &(taskQueue.front());
-
-    if (currentProcess->burstTime <= quantum) {
-
-      int lt_or_eq_Quantum{currentProcess->burstTime};
-      currentProcess->load(lt_or_eq_Quantum);
-      std::cout << "Completed Process " << currentProcess->id
-                << ". Will now dump it..." << std::endl;
-      process currentProcess_cpy{*currentProcess};
+    if (qClock == 0 && !queueDone(taskQueue)) {
+      workBlock = (taskQueue.front());
       taskQueue.erase(taskQueue.begin());
-      taskQueue.push_back(currentProcess_cpy);
-      clock += lt_or_eq_Quantum;
-      break;
+      log("Switched to process #" << workBlock.id << "\n");
+      log("Process Information to follow:\n");
+      log(workBlock);
+      log("\n");
+    } else {
+      log("Still working on Process #" << workBlock.id);
     }
-    currentProcess->load(quantum);
-    std::cout << "Worked on process " << currentProcess->id << " for "
-              << quantum << " millisecond." << std::endl
-              << std::endl;
-    std::cout << *currentProcess << std::endl << std::endl;
-    process currentProcess_cpy{*currentProcess};
-    taskQueue.erase(taskQueue.begin());
-    taskQueue.push_back(currentProcess_cpy);
-    clock += quantum;
+    workBlock.load(1);
+    log("Worked on Process #" << workBlock.id << " for 1 millisecond.\n");
+    log("Process Information to follow:\n");
+    log(workBlock);
+    log("\n");
+
+    clock++;
+    qClock++;
+
+    if (workBlock.burstTime == 0) {
+      log("Finished Process " << workBlock.id);
+      qClock = 0;
+      workBlock = {-2, -2, -2};
+    } else {
+      if (qClock == quantum) {
+        log("Quantum time has been reached... Will now load workBlock "
+            "Processes into back of queue...");
+        taskQueue.push_back(workBlock);
+        workBlock = {-1, -1, -1};
+        qClock = 0;
+      }
+    }
   }
-  std::cout << "Finished all processes using Round Robin (q=" << quantum
-            << ") in " << clock << " milliseconds." << std::endl;
+  log("Finished Round Robin in " << clock << " milliseconds.");
 }

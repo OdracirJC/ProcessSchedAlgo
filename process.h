@@ -12,6 +12,7 @@ struct process {
   int id;
 
   process(int aT, int tR, int idNum);
+  process() {}
   process(const process &p0);
   void load(int workTime);
   friend std::ostream &operator<<(std::ostream &out, const process &p);

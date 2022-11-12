@@ -6,7 +6,7 @@ cflags := -Wall -Wextra
 binary=bin
 
 
-$(binary): main.o process.o sjf.o srtf.o utility.o fcfs.o rr.o
+$(binary): main.o process.o sjf.o srtf.o utility.o fcfs.o rr.o analyis.o
 	$(cc) $^ -o $@
 
 main.o: main.cpp
@@ -18,6 +18,8 @@ process.o: process.cpp
 utility.o: utility.cpp
 	g++ -c utility.cpp
 
+analyis.o: analyis.cpp
+	g++ -c analyis.cpp
 
 sjf.o: sjf.cpp
 	g++ -c sjf.cpp
