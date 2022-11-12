@@ -35,5 +35,7 @@ int main() {
   std::vector<process> processes_4{p13, p14, p15, p16};
 
   shortestJobFirst(processes);
+  firstComeFirstServe(processes_2);
+  roundRobin(processes_3, 2);
   return 0;
 }

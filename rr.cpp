@@ -5,11 +5,13 @@
 #define line "--------------------"
 
 void roundRobin(std::vector<process> &processVector, const int quantum) {
-  std::vector<float> rrlist;
-  std::vector<process> taskQueue;
+  const int nProcesses{static_cast<int>(processVector.capacity())};
+  static std::vector<float> rrlist;
+  static std::vector<float> waitlist;
+  static std::vector<process> taskQueue;
   process terminatorBlock(-2, -2, -2);
-  process workBlock;
-  int clock{0}; // Clock begins at 0
+  static process workBlock;
+  static int clock{0}; // Clock begins at 0
   int qClock{0};
 
   while (!processVector.empty() || !queueDone(taskQueue) ||
@@ -19,10 +21,10 @@ void roundRobin(std::vector<process> &processVector, const int quantum) {
     log(line);
     log("LOG:\n");
     addToTaskQueue(taskQueue, processVector, clock);
-
     if (qClock == 0 && !queueDone(taskQueue)) {
       workBlock = (taskQueue.front());
       taskQueue.erase(taskQueue.begin());
+      logPWT(waitlist, workBlock, clock);
       log("Switched to process #" << workBlock.id << "\n");
       log("Process Information to follow:\n");
       log(workBlock);
@@ -49,6 +51,7 @@ void roundRobin(std::vector<process> &processVector, const int quantum) {
       if (qClock == quantum) {
         log("Quantum time has been reached... Will now load workBlock "
             "Processes into back of queue...");
+        workBlock.loadOffTime = clock;
         addToTaskQueue(taskQueue, processVector, clock);
         taskQueue.push_back(workBlock);
         workBlock = {-1, -1, -1};
@@ -58,4 +61,5 @@ void roundRobin(std::vector<process> &processVector, const int quantum) {
   }
   log("Finished Round Robin in " << clock << " milliseconds.");
   log("Average Turn Around Time: " << averageTT(rrlist));
+  log("Average Waiting Time: " << averagePWT(waitlist, nProcesses));
 }

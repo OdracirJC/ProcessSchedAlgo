@@ -4,13 +4,9 @@
 #include "utility.h"
 #include <vector>
 
-struct turnaround_waiting {
-  float averageTurnAroundTime;
-  float averageWaitingTime;
-  std::vector<process> correspondingProcesses;
-  turnaround_waiting() {}
-};
-
 void logTT(std::vector<float> &processList, process &p, int clock);
 float averageTT(std::vector<float> &processList);
+void logNPWT(std::vector<float> &processList, process &p, int clock);
+void logPWT(std::vector<float> &processList, process &p, int clock);
+float averagePWT(std::vector<float> &processList, int nProcesses);
 #endif

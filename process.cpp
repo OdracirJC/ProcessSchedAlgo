@@ -1,9 +1,16 @@
 #include "process.h"
 
 process::process(int aT, int tR, int idNum)
-    : arrivalTime{aT}, burstTime{tR}, id{idNum} {}
+    : arrivalTime{aT}, burstTime{tR}, id{idNum}, loadOffTime{-1} {}
 process::process(const process &p0)
-    : arrivalTime{p0.arrivalTime}, burstTime{p0.burstTime}, id{p0.id} {}
+    : arrivalTime{p0.arrivalTime}, burstTime{p0.burstTime}, id{p0.id},
+      loadOffTime{p0.loadOffTime} {}
+void process::operator=(const process &p) {
+  arrivalTime = p.arrivalTime;
+  burstTime = p.burstTime;
+  id = p.id;
+  loadOffTime = p.loadOffTime;
+}
 void process::load(int workTime) {
   if (workTime >= burstTime)
     burstTime = 0;
