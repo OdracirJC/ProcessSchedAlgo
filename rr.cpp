@@ -8,7 +8,7 @@
 std::array<float, 2> roundRobin(std::vector<process> &processVector,
                                 const int quantum, char v) {
   static bool verbose{(v == 'Y') ? false : true};
-  const int nProcesses{static_cast<int>(processVector.capacity())};
+  static const int nProcesses = processVector.capacity();
   static std::vector<float> rrlist;
   static std::vector<float> waitlist;
   static std::vector<process> taskQueue;
@@ -74,10 +74,10 @@ std::array<float, 2> roundRobin(std::vector<process> &processVector,
   }
   if (verbose) {
     log("Finished Round Robin in " << clock << " milliseconds.");
-    log("Average Turn Around Time: " << averageTT(rrlist));
+    log("Average Turn Around Time: " << averageTT(rrlist, nProcesses));
     log("Average Waiting Time: " << averagePWT(waitlist, nProcesses));
   }
-  returnArray[0] = averageTT(rrlist);
+  returnArray[0] = averageTT(rrlist, nProcesses);
   returnArray[1] = averagePWT(waitlist, nProcesses);
   return returnArray;
 }

@@ -12,6 +12,7 @@ std::array<float, 2> firstComeFirstServe(std::vector<process> &processVector,
   static std::vector<float> wtList;
   static std::array<float, 2> returnArray;
   static int clock{0};
+  static const int nProcesses = processVector.capacity();
 
   while (!processVector.empty() || !queueDone(taskQueue)) {
     if (verbose)
@@ -40,12 +41,14 @@ std::array<float, 2> firstComeFirstServe(std::vector<process> &processVector,
     std::cout << "Finished all processes using First Come First Serve in "
               << clock << " millisecond(s)." << std::endl
               << std::endl;
-    std::cout << "Average Turn Around Time: " << averageTT(ttList) << std::endl
+    std::cout << "Average Turn Around Time: " << averageTT(ttList, nProcesses)
+              << std::endl
               << std::endl;
-    std::cout << "Average Wait-Time: " << averageTT(wtList) << std::endl
+    std::cout << "Average Wait-Time: " << averageTT(wtList, nProcesses)
+              << std::endl
               << std::endl;
   }
-  returnArray[0] = averageTT(ttList);
-  returnArray[1] = averageTT(wtList);
+  returnArray[0] = averageTT(ttList, nProcesses);
+  returnArray[1] = averageTT(wtList, nProcesses);
   return returnArray;
 }

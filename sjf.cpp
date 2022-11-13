@@ -12,6 +12,7 @@ std::array<float, 2> shortestJobFirst(std::vector<process> &processVector,
   static std::vector<float> waitList;
   static std::array<float, 2> returnArray;
   static int clock{0};
+  static const int nProcesses = processVector.capacity();
 
   while (!processVector.empty() || !queueDone(taskQueue)) {
     if (verbose)
@@ -41,13 +42,13 @@ std::array<float, 2> shortestJobFirst(std::vector<process> &processVector,
     std::cout << "Finished all processes using Shortest Job First in " << clock
               << " millisecond(s)." << std::endl
               << std::endl;
-    std::cout << "Average Turn-Around Time: " << averageTT(sjflist)
+    std::cout << "Average Turn-Around Time: " << averageTT(sjflist, nProcesses)
               << " millisecond(s)" << std::endl
               << std::endl;
-    std::cout << "Average Wait-Time: " << averageTT(waitList)
+    std::cout << "Average Wait-Time: " << averageTT(waitList, nProcesses)
               << " millisecond(s)" << std::endl;
   }
-  returnArray[0] = averageTT(sjflist);
-  returnArray[1] = averageTT(waitList);
+  returnArray[0] = averageTT(sjflist, nProcesses);
+  returnArray[1] = averageTT(waitList, nProcesses);
   return returnArray;
 }
