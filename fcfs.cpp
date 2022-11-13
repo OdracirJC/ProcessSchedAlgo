@@ -3,16 +3,16 @@
 #include "schedulingalgorithms.h"
 #include "utility.h"
 
-std::array<float, 2> firstComeFirstServe(std::vector<process> &processVector,
+std::array<float, 2> firstComeFirstServe(std::vector<process> processVector,
                                          char v) {
-  static bool verbose{(v == 'Y') ? false : true};
-  static process workBlock;
-  static std::vector<process> taskQueue;
-  static std::vector<float> ttList;
-  static std::vector<float> wtList;
-  static std::array<float, 2> returnArray;
-  static int clock{0};
-  static const int nProcesses = processVector.capacity();
+  bool verbose{(v == 'Y') ? false : true};
+  process workBlock;
+  std::vector<process> taskQueue;
+  std::vector<float> ttList;
+  std::vector<float> wtList;
+  std::array<float, 2> returnArray;
+  int clock{0};
+  const int nProcesses = processVector.capacity();
 
   while (!processVector.empty() || !queueDone(taskQueue)) {
     if (verbose)

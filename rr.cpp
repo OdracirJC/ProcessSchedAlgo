@@ -5,17 +5,17 @@
 #define log(x) std::cout << x << std::endl
 #define line "--------------------"
 
-std::array<float, 2> roundRobin(std::vector<process> &processVector,
+std::array<float, 2> roundRobin(std::vector<process> processVector,
                                 const int quantum, char v) {
-  static bool verbose{(v == 'Y') ? false : true};
-  static const int nProcesses = processVector.capacity();
-  static std::vector<float> rrlist;
-  static std::vector<float> waitlist;
-  static std::vector<process> taskQueue;
-  static std::array<float, 2> returnArray;
+  bool verbose{(v == 'Y') ? false : true};
+  const int nProcesses = processVector.capacity();
+  std::vector<float> rrlist;
+  std::vector<float> waitlist;
+  std::vector<process> taskQueue;
+  std::array<float, 2> returnArray;
   process terminatorBlock(-2, -2, -2);
-  static process workBlock;
-  static int clock{0}; // Clock begins at 0
+  process workBlock;
+  int clock{0}; // Clock begins at 0
   int qClock{0};
 
   while (!processVector.empty() || !queueDone(taskQueue) ||
