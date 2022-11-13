@@ -1,4 +1,5 @@
 #include "process.h"
+#include "schedulingalgorithms.h"
 #include <cstring>
 #include <iomanip>
 #include <iostream>
@@ -6,15 +7,13 @@
 #include <vector>
 #define line std::cout << "=======================================" << std::endl
 #define br std::cout << "\n" << std::endl
-extern void firstComeFirstServe(std::vector<process> &processVector);
-extern void shortestJobFirst(std::vector<process> &processVector);
-extern void roundRobin(std::vector<process> &processVector, int quantum);
 
 int main() {
   std::vector<process> plist;
   int upperLim;
   int nop;
   char ch;
+  char v;
   line;
   line;
   std::cout << "CPP SCHEDULING ALGORITHM PROJECT" << std::endl;
@@ -51,20 +50,26 @@ int main() {
     if (ch == 'Y')
       break;
   }
+  br;
+  std::cout << "Output for the Scheduling Algorithms will be VERY verbose."
+            << std::endl;
+  std::cout << "Would you like to turn verbose output off?(Y/y)" << std::flush;
+  std::cin >> v;
+  v = toupper(v);
   std::mt19937 randGen;
   std::uniform_int_distribution<> urand(1, upperLim);
-  for (int i = 0; i < nop; i++) {
+  plist.push_back({0, urand(randGen), 0});
+  for (int i = 1; i < nop; i++) {
     plist.push_back({urand(randGen), urand(randGen), i});
   }
   br;
   std::cout << std::left << std::setw(25) << " " << std::left << std::setw(25)
             << "Process Table" << std::left << std::setw(25) << " "
             << std::endl;
-  br;
   for (int i = 0; i < 74; i++) {
     std::cout << "=";
   }
-  br;
+  std::cout << " " << std::endl;
   std::cout << std::left << std::setw(25) << "Process ID#" << std::left
             << std::setw(25) << "Arrival Time" << std::left << std::setw(25)
             << "Burst Time" << std::endl;
@@ -73,22 +78,39 @@ int main() {
               << std::setw(25) << plist[i].arrivalTime << std::left
               << std::setw(25) << plist[i].burstTime << std::endl;
   }
-  br;
-  std::cout << std::left << std::setw(25) << " " << std::left << std::setw(25)
-            << "Scheduling Algorithm Results" << std::left << std::setw(25)
-            << " " << std::endl;
-  br;
   for (int i = 0; i < 74; i++) {
     std::cout << "=";
   }
-
+  br;
+  br;
+  std::cout << std::left << std::setw(25) << " " << std::left << std::setw(25)
+            << "Scheduling Algorithm Results" << std::left << std::setw(25)
+            << std::endl;
+  std::cout << "(Measured in milliseconds)" << std::endl;
+  for (int i = 0; i < 74; i++) {
+    std::cout << "=";
+  }
   std::cout << " " << std::endl;
 
-  std::cout << std::left << std::setw(25) << "First Come First Serve"
-            << std::endl;
-  firstComeFirstServe(plist);
-  std::cout << std::left << std::setw(25) << "Shortest Job First" << std::endl;
-  shortestJobFirst(plist);
-  std::cout << std::left << std::setw(25) << "Round Robin" << std::endl;
-  roundRobin(plist, 2);
+  std::vector<process> plist_cpy_1 = plist;
+  std::vector<process> plist_cpy_2 = plist;
+  std::vector<process> plist_cpy_3 = plist;
+
+  std::array<float, 2> fcfsResult = firstComeFirstServe(plist_cpy_1, v);
+  std::array<float, 2> sjfResult = shortestJobFirst(plist_cpy_2, v);
+  std::array<float, 2> rrResult = roundRobin(plist_cpy_3, 2, v);
+
+  std::cout << std::left << std::setw(35) << "Scheduling Algorithm" << std::left
+            << std::setw(35) << "Average Turn Around Time" << std::left
+            << std::setw(35) << "Average Wait Time" << std::endl;
+
+  std::cout << std::left << std::setw(35) << "First Come First Serve"
+            << std::left << std::setw(35) << fcfsResult[0] << std::left
+            << std::setw(35) << fcfsResult[1] << std::endl;
+  std::cout << std::left << std::setw(35) << "Shortest Job First" << std::left
+            << std::setw(35) << sjfResult[0] << std::left << std::setw(35)
+            << sjfResult[1] << std::endl;
+  std::cout << std::left << std::setw(35) << "Round Robin q=2" << std::left
+            << std::setw(35) << rrResult[0] << std::left << std::setw(35)
+            << rrResult[1] << std::endl;
 }

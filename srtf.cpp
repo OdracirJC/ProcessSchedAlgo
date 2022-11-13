@@ -1,21 +1,20 @@
 #include "process.h"
+#include "schedulingalgorithms.h"
 #include "utility.h"
-
-/*Declaration of necessary Functions. */
-process *loadShortestProcess(std::vector<process> &taskQueueRef);
 
 /*Main Function for Algorithm*/
 void shortestRemainingTimeFirst(std::vector<process> &processVector) {
-  std::vector<process> taskQueue;
-  int clock{0};
+  static std::vector<process> taskQueue;
+  static bool verbose = true;
+  static int clock{0};
 
   while (!processVector.empty() || !queueDone(taskQueue)) {
 
     std::cout << "Clock Value is at: " << clock << std::endl << std::endl;
-    addToTaskQueue(taskQueue, processVector, clock);
+    addToTaskQueue(taskQueue, processVector, clock, verbose);
     if (taskQueue.size() != 0) {
 
-      process *currentProcess = loadShortestProcess(taskQueue);
+      process *currentProcess = loadShortestProcess(taskQueue, verbose);
       currentProcess->load(1);
       if (currentProcess->burstTime == 0) {
         std::cout << "Completed Process " << currentProcess->id

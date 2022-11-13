@@ -1,48 +1,53 @@
 #include "analysis.h"
 #include "process.h"
+#include "schedulingalgorithms.h"
 #include "utility.h"
 
-void shortestJobFirst(std::vector<process> &processVector) {
+std::array<float, 2> shortestJobFirst(std::vector<process> &processVector,
+                                      char v) {
+  static bool verbose{(v == 'Y') ? false : true};
   static process workBlock;
-  std::vector<process> taskQueue;
+  static std::vector<process> taskQueue;
   static std::vector<float> sjflist;
   static std::vector<float> waitList;
-  int clock{0};
+  static std::array<float, 2> returnArray;
+  static int clock{0};
 
   while (!processVector.empty() || !queueDone(taskQueue)) {
+    if (verbose)
+      std::cout << "Clock Value is at: " << clock << std::endl << std::endl;
 
-    std::cout << "Clock Value is at: " << clock << std::endl << std::endl;
+    addToTaskQueue(taskQueue, processVector, clock, verbose);
+    if (taskQueue.size() != 0) {
 
-    addToTaskQueue(taskQueue, processVector, clock);
-    if (taskQueue.capacity() != 0) {
-
-      workBlock = *loadShortestProcess(taskQueue);
+      workBlock = *loadShortestProcess(taskQueue, verbose);
       logNPWT(waitList, workBlock, clock);
       clock += workBlock.burstTime;
-      addToTaskQueue(taskQueue, processVector, clock);
-
-      std::cout << "TurnAround Time: for process " << workBlock.id << " "
-                << clock - workBlock.arrivalTime << std::endl;
+      addToTaskQueue(taskQueue, processVector, clock, verbose);
+      if (verbose) {
+        std::cout << "Worked on Process " << workBlock.id << " for "
+                  << workBlock.burstTime << " millisecond(s)" << std::endl
+                  << std::endl;
+        std::cout << "Process will now be dumped... " << std::endl << std::endl;
+      }
       logTT(sjflist, workBlock, clock);
-
       workBlock.load(workBlock.burstTime);
-      std::cout << "Worked on Process " << workBlock.id << " for "
-                << workBlock.burstTime << " millisecond(s)" << std::endl
-                << std::endl;
-      std::cout << "Process will now be dumped... " << std::endl << std::endl;
-
       taskQueue.erase(taskQueue.begin());
-    } else {
+    } else
       clock++;
-    }
   }
-  std::cout << "Finished all processes using Shortest Job First in " << clock
-            << " millisecond(s)." << std::endl
-            << std::endl;
-  std::cout << "Average Turn-Around Time: " << averageTT(sjflist)
-            << " millisecond(s)" << std::endl
-            << std::endl;
-  std::cout << "Average Wait-Time: " << averageTT(waitList) << " millisecond(s)"
-            << std::endl
-            << std::endl;
+  if (verbose) {
+
+    std::cout << "Finished all processes using Shortest Job First in " << clock
+              << " millisecond(s)." << std::endl
+              << std::endl;
+    std::cout << "Average Turn-Around Time: " << averageTT(sjflist)
+              << " millisecond(s)" << std::endl
+              << std::endl;
+    std::cout << "Average Wait-Time: " << averageTT(waitList)
+              << " millisecond(s)" << std::endl;
+  }
+  returnArray[0] = averageTT(sjflist);
+  returnArray[1] = averageTT(waitList);
+  return returnArray;
 }

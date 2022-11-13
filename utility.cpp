@@ -17,28 +17,33 @@ bool queueDone(std::vector<process> &taskQueueRef) {
 
 /* Add to Tak Queue Subroutine */
 void addToTaskQueue(std::vector<process> &taskQueueRef,
-                    std::vector<process> &processVectorRef, int &clock) {
+                    std::vector<process> &processVectorRef, int &clock,
+                    bool &verbose) {
 
   for (auto i = 0; i < (int)processVectorRef.size(); i++) {
     if (processVectorRef.at(i).arrivalTime <= clock) {
       taskQueueRef.push_back(processVectorRef.at(i));
-      std::cout << "Adding Process " << processVectorRef.at(i).id
-                << " to Task Queue.\n";
+      if (verbose)
+        std::cout << "Adding Process " << processVectorRef.at(i).id
+                  << " to Task Queue.\n";
       processVectorRef.erase(processVectorRef.begin() + i);
     }
   }
 }
 
-process *loadFirstProcess(std::vector<process> &taskQueueRef) {
+process *loadFirstProcess(std::vector<process> &taskQueueRef, bool &verbose) {
   std::sort(taskQueueRef.begin(), taskQueueRef.end(), &process_at_comp);
   process *first = &(taskQueueRef.front());
-  std::cout << "Shortest Process is process " << first->id << ".\n";
+  if (verbose)
+    std::cout << "First Process is process " << first->id << ".\n";
   return first;
 }
 
-process *loadShortestProcess(std::vector<process> &taskQueueRef) {
+process *loadShortestProcess(std::vector<process> &taskQueueRef,
+                             bool &verbose) {
   std::sort(taskQueueRef.begin(), taskQueueRef.end(), &process_bt_comp);
   process *shortest = &(taskQueueRef.front());
-  std::cout << "Shortest Process is process " << shortest->id << ".\n";
+  if (verbose)
+    std::cout << "Shortest Process is process " << shortest->id << ".\n";
   return shortest;
 }
