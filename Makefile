@@ -1,9 +1,10 @@
 # -*- MakeFile -*-
-
+#Below is a MakeFile, you can use it to compile my Project if you are not using an IDE, and prefer to use a terminal like myself. 
 cc := g++
 objs := $(wildcard *.o)
 cflags := -Wall -Wextra 
-binary=bin
+
+binary=bin #If you are NOT using UNIX, might have to add .exe to end of bin
 
 
 $(binary): main.o process.o sjf.o utility.o fcfs.o rr.o analysis.o 
